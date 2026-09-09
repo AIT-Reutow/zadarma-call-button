@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zadarma - Позвонить нам</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Trebuchet MS', 'Helvetica CY', sans-serif;
+    background: #f5f5f5;
+  }
+</style>
+</head>
+<body>
+
+  <div id="myZadarmaCallmeWidget18481"></div>
+
+  <div id="zadarmaScripts"></div>
+  <script>
+    (function() {
+      var script = document.createElement('script');
+      script.src = 'https://my.zadarma.com/callmewidget/v2.0.9/loader.js';
+      document.getElementById('zadarmaScripts').appendChild(script);
+    })();
+  </script>
+
+  <script>
+    var myZadarmaCallmeWidget18481;
+    var myZadarmaCallmeWidgetFn18481 = function() {
+      myZadarmaCallmeWidget18481 = new ZadarmaCallmeWidget("myZadarmaCallmeWidget18481");
+      myZadarmaCallmeWidget18481.create({
+        "widgetId": "zFshUpjtsnha8Yf6L11ymtyf24L37Le5jnkdXXdg9kCF2TvtcaZkZ5y8fYB419d8Lb9L57v42JHEfsCauXpNs7frbeatrNc80be98f4d13a097150ac0ef36bea69c8c",
+        "sipId": "346606_19",
+        "domElement": "myZadarmaCallmeWidget18481"
+      }, {
+        "shape": "square",
+        "language": "ru",
+        "width": "0",
+        "dtmf": false,
+        "font": "'Trebuchet MS','Helvetica CY',sans-serif",
+        "color_call": "rgb(255, 255, 255)",
+        "color_bg_call": "rgb(209, 34, 34)",
+        "color_border_call": "rgb(232, 144, 144)",
+        "is_custom_hover": 1,
+        "color_call_hover": "rgb(255, 255, 255)",
+        "bg_call_hover": "rgb(209, 44, 44)",
+        "border_call_hover": "rgb(255, 255, 255)",
+        "color_connection": "rgb(255, 255, 255)",
+        "color_bg_connection": "rgb(33, 211, 166)",
+        "color_border_connection": "rgb(144, 233, 211)",
+        "color_calling": "rgb(255, 255, 255)",
+        "color_border_calling": "rgb(255, 218, 128)",
+        "color_bg_calling": "rgb(255, 181, 0)",
+        "color_ended": "rgb(255, 255, 255)",
+        "color_bg_ended": "rgb(164, 164, 164)",
+        "color_border_ended": "rgb(128, 60, 60)"
+      });
+    };
+
+    if (window.addEventListener) {
+      window.addEventListener('load', myZadarmaCallmeWidgetFn18481, false);
+    } else if (window.attachEvent) {
+      window.attachEvent('onload', myZadarmaCallmeWidgetFn18481);
+    }
+  </script>
+
+</body>
+</html>
