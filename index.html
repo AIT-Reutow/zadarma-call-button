@@ -165,13 +165,9 @@
     color: #2a9d5c;
     text-align: center;
     display: none;
+    margin: 0;
   }
 
-  .done-note.visible {
-    display: block;
-  }
-
-  .card .primary-btn.hidden-when-done,
   .card.done .primary-btn {
     display: none;
   }
@@ -180,19 +176,18 @@
     display: block;
   }
 
-  .zadarma-block {
+  .or-call-row {
     text-align: center;
-    display: none;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
   }
 
-  .zadarma-block.visible {
+  .or-call-row .or-call-text {
     display: block;
-  }
-
-  .zadarma-block .zadarma-caption {
     font-size: 13px;
-    color: #2a9d5c;
-    margin-bottom: 12px;
+    color: #777;
+    margin-bottom: 10px;
   }
 
   /* Modal */
@@ -308,7 +303,9 @@
 
   <div class="page">
 
-    <!-- Форма 1: бронирование консультации по слотам -->
+    <!-- Форма 1: бронирование консультации по слотам.
+         "Забронировать" пока ничего не делает — по требованию она должна
+         вести на отдельную страницу бронирования, ссылка будет добавлена позже. -->
     <div class="card" id="bookingCard">
       <h1>Забронировать консультацию</h1>
       <p class="subtitle">Выберите удобные день и время</p>
@@ -319,7 +316,6 @@
       <p class="selected-info" id="selectedInfo"></p>
 
       <button class="primary-btn" id="bookBtn" disabled>Забронировать</button>
-      <p class="done-note" id="bookingDoneNote">Спасибо! Заявка на консультацию принята, мы свяжемся с вами для подтверждения.</p>
     </div>
 
     <!-- Форма 2: просто оставить данные для связи, без выбора времени -->
@@ -329,39 +325,13 @@
 
       <button class="primary-btn" id="leaveContactBtn">Оставить данные для связи</button>
       <p class="done-note" id="contactDoneNote">Спасибо! Мы получили ваши данные и скоро свяжемся с вами.</p>
+
+      <div class="or-call-row">
+        <span class="or-call-text">Или позвоните нам сразу:</span>
+        <div id="myZadarmaCallmeWidgetCard"></div>
+      </div>
     </div>
 
-    <!-- Кнопка Zadarma появляется после любой из двух форм -->
-    <div class="card zadarma-block" id="zadarmaBlock">
-      <p class="zadarma-caption">А если срочно — можете позвонить нам прямо сейчас:</p>
-      <div id="myZadarmaCallmeWidget18481"></div>
-    </div>
-
-  </div>
-
-  <!-- Модалка для формы бронирования -->
-  <div class="modal-overlay" id="bookingModalOverlay">
-    <div class="modal">
-      <button class="close-btn" data-close="bookingModalOverlay" aria-label="Закрыть">✕</button>
-      <h2>Подтверждение записи</h2>
-      <p class="modal-sub" id="bookingModalSub"></p>
-
-      <form id="bookingForm" novalidate>
-        <div class="field" id="bookingNameField">
-          <label for="bookingNameInput">ФИО</label>
-          <input type="text" id="bookingNameInput" name="name" placeholder="Иванов Иван Иванович" autocomplete="name" value="Иванов Иван Иванович">
-          <div class="error">Пожалуйста, укажите ФИО</div>
-        </div>
-
-        <div class="field" id="bookingPhoneField">
-          <label for="bookingPhoneInput">Номер телефона</label>
-          <input type="tel" id="bookingPhoneInput" name="phone" placeholder="+7 900 000-00-00" autocomplete="tel" value="+7 900 123-45-67">
-          <div class="error">Пожалуйста, укажите корректный номер телефона</div>
-        </div>
-
-        <button type="submit" class="submit-btn">Записаться</button>
-      </form>
-    </div>
   </div>
 
   <!-- Модалка для формы "просто оставить данные" -->
@@ -386,6 +356,11 @@
 
         <button type="submit" class="submit-btn">Отправить</button>
       </form>
+
+      <div class="or-call-row">
+        <span class="or-call-text">Или позвоните нам сразу:</span>
+        <div id="myZadarmaCallmeWidgetModal"></div>
+      </div>
     </div>
   </div>
 
@@ -399,55 +374,75 @@
   </script>
 
   <script>
-    var myZadarmaCallmeWidget18481;
-    var myZadarmaCallmeWidgetFn18481 = function() {
-      myZadarmaCallmeWidget18481 = new ZadarmaCallmeWidget("myZadarmaCallmeWidget18481");
-      myZadarmaCallmeWidget18481.create({
-        "widgetId": "zFshUpjtsnha8Yf6L11ymtyf24L37Le5jnkdXXdg9kCF2TvtcaZkZ5y8fYB419d8Lb9L57v42JHEfsCauXpNs7frbeatrNc80be98f4d13a097150ac0ef36bea69c8c",
-        "sipId": "346606_777",
-        "domElement": "myZadarmaCallmeWidget18481"
-      }, {
-        "shape": "square",
-        "language": "ru",
-        "width": "0",
-        "dtmf": false,
-        "font": "'Trebuchet MS','Helvetica CY',sans-serif",
-        "color_call": "rgb(255, 255, 255)",
-        "color_bg_call": "rgb(209, 34, 34)",
-        "color_border_call": "rgb(232, 144, 144)",
-        "is_custom_hover": 1,
-        "color_call_hover": "rgb(255, 255, 255)",
-        "bg_call_hover": "rgb(209, 44, 44)",
-        "border_call_hover": "rgb(255, 255, 255)",
-        "color_connection": "rgb(255, 255, 255)",
-        "color_bg_connection": "rgb(33, 211, 166)",
-        "color_border_connection": "rgb(144, 233, 211)",
-        "color_calling": "rgb(255, 255, 255)",
-        "color_border_calling": "rgb(255, 218, 128)",
-        "color_bg_calling": "rgb(255, 181, 0)",
-        "color_ended": "rgb(255, 255, 255)",
-        "color_bg_ended": "rgb(164, 164, 164)",
-        "color_border_ended": "rgb(128, 60, 60)"
-      });
+    // Общая настройка для всех кнопок Zadarma на странице.
+    var ZADARMA_WIDGET_ID = "zFshUpjtsnha8Yf6L11ymtyf24L37Le5jnkdXXdg9kCF2TvtcaZkZ5y8fYB419d8Lb9L57v42JHEfsCauXpNs7frbeatrNc80be98f4d13a097150ac0ef36bea69c8c";
+    var ZADARMA_SIP_ID = "346606_777";
+    var ZADARMA_STYLE_OPTIONS = {
+      "shape": "square",
+      "language": "ru",
+      "width": "0",
+      "dtmf": false,
+      "font": "'Trebuchet MS','Helvetica CY',sans-serif",
+      "color_call": "rgb(255, 255, 255)",
+      "color_bg_call": "rgb(209, 34, 34)",
+      "color_border_call": "rgb(232, 144, 144)",
+      "is_custom_hover": 1,
+      "color_call_hover": "rgb(255, 255, 255)",
+      "bg_call_hover": "rgb(209, 44, 44)",
+      "border_call_hover": "rgb(255, 255, 255)",
+      "color_connection": "rgb(255, 255, 255)",
+      "color_bg_connection": "rgb(33, 211, 166)",
+      "color_border_connection": "rgb(144, 233, 211)",
+      "color_calling": "rgb(255, 255, 255)",
+      "color_border_calling": "rgb(255, 218, 128)",
+      "color_bg_calling": "rgb(255, 181, 0)",
+      "color_ended": "rgb(255, 255, 255)",
+      "color_bg_ended": "rgb(164, 164, 164)",
+      "color_border_ended": "rgb(128, 60, 60)"
     };
 
+    var zadarmaLibReady = false;
+    var zadarmaLibReadyCallbacks = [];
+
+    function onZadarmaLibReady(cb) {
+      if (zadarmaLibReady) { cb(); return; }
+      zadarmaLibReadyCallbacks.push(cb);
+    }
+
+    function markZadarmaLibReady() {
+      zadarmaLibReady = true;
+      zadarmaLibReadyCallbacks.forEach(function(cb) { cb(); });
+      zadarmaLibReadyCallbacks = [];
+    }
+
     if (window.addEventListener) {
-      window.addEventListener('load', myZadarmaCallmeWidgetFn18481, false);
+      window.addEventListener('load', markZadarmaLibReady, false);
     } else if (window.attachEvent) {
-      window.attachEvent('onload', myZadarmaCallmeWidgetFn18481);
+      window.attachEvent('onload', markZadarmaLibReady);
+    }
+
+    var zadarmaCreatedFor = {};
+
+    // Создаёт кнопку внутри elementId (один раз). ВАЖНО: элемент должен
+    // быть видимым (не display:none) в момент вызова — иначе библиотека
+    // Zadarma при инициализации измерит его нулевую ширину и кнопка
+    // схлопнется до иконки вместо целой "таблетки" с текстом.
+    function ensureZadarmaButton(elementId) {
+      if (zadarmaCreatedFor[elementId]) return;
+      zadarmaCreatedFor[elementId] = true;
+      onZadarmaLibReady(function() {
+        var instance = new ZadarmaCallmeWidget(elementId);
+        instance.create({
+          "widgetId": ZADARMA_WIDGET_ID,
+          "sipId": ZADARMA_SIP_ID,
+          "domElement": elementId
+        }, ZADARMA_STYLE_OPTIONS);
+      });
     }
   </script>
 
   <script>
     (function() {
-      var zadarmaBlock = document.getElementById('zadarmaBlock');
-
-      function revealZadarmaBlock() {
-        if (zadarmaBlock.classList.contains('visible')) return;
-        zadarmaBlock.classList.add('visible');
-        zadarmaBlock.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-
       function isValidPhone(value) {
         var digits = value.replace(/\D/g, '');
         return digits.length >= 10;
@@ -488,8 +483,6 @@
       var slotsEl = document.getElementById('slots');
       var selectedInfoEl = document.getElementById('selectedInfo');
       var bookBtn = document.getElementById('bookBtn');
-      var bookingCard = document.getElementById('bookingCard');
-      var bookingDoneNote = document.getElementById('bookingDoneNote');
 
       function renderDays() {
         daysEl.innerHTML = '';
@@ -553,42 +546,11 @@
       renderSlots();
       updateSelectedInfo();
 
-      var bookingModalOverlay = document.getElementById('bookingModalOverlay');
-      var bookingModalSub = document.getElementById('bookingModalSub');
-      var bookingForm = document.getElementById('bookingForm');
-      var bookingNameField = document.getElementById('bookingNameField');
-      var bookingPhoneField = document.getElementById('bookingPhoneField');
-      var bookingNameInput = document.getElementById('bookingNameInput');
-      var bookingPhoneInput = document.getElementById('bookingPhoneInput');
-
+      // "Забронировать" в будущем будет вести на отдельную страницу
+      // бронирования — пока намеренно ничего не делает.
       bookBtn.addEventListener('click', function() {
-        var d = days[selectedDayIndex];
-        bookingModalSub.textContent = 'Консультация: ' + d.getDate() + ' ' + MONTHS[d.getMonth()] + ', ' + selectedSlot;
-        bookingModalOverlay.classList.add('open');
-      });
-
-      bookingForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        var nameValid = bookingNameInput.value.trim().length > 1;
-        var phoneValid = isValidPhone(bookingPhoneInput.value);
-
-        bookingNameField.classList.toggle('invalid', !nameValid);
-        bookingPhoneField.classList.toggle('invalid', !phoneValid);
-
-        if (!nameValid || !phoneValid) return;
-
-        // No backend wired up yet — booking data is only available client-side for now.
-        console.log('Booking submitted:', {
-          name: bookingNameInput.value.trim(),
-          phone: bookingPhoneInput.value.trim(),
-          day: days[selectedDayIndex],
-          slot: selectedSlot
-        });
-
-        closeModal(bookingModalOverlay);
-        bookingCard.classList.add('done');
-        revealZadarmaBlock();
+        // TODO: перейти на страницу бронирования, например:
+        // window.location.href = '/booking?day=' + ... + '&slot=' + selectedSlot;
       });
 
       // ---------- Форма 2: просто оставить данные ----------
@@ -601,8 +563,14 @@
       var leaveContactBtn = document.getElementById('leaveContactBtn');
       var leaveContactCard = document.getElementById('leaveContactCard');
 
+      // Кнопка звонка сразу под "Оставить данные для связи" — всегда доступна,
+      // не требует заполнения формы.
+      ensureZadarmaButton('myZadarmaCallmeWidgetCard');
+
       leaveContactBtn.addEventListener('click', function() {
         contactModalOverlay.classList.add('open');
+        // Кнопка звонка внутри модалки — как альтернатива заполнению формы.
+        ensureZadarmaButton('myZadarmaCallmeWidgetModal');
       });
 
       contactForm.addEventListener('submit', function(e) {
@@ -624,7 +592,6 @@
 
         closeModal(contactModalOverlay);
         leaveContactCard.classList.add('done');
-        revealZadarmaBlock();
       });
     })();
   </script>
