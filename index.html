@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zadarma - Позвонить нам</title>
 <style>
+  * {
+    box-sizing: border-box;
+  }
+
   body {
     margin: 0;
     min-height: 100vh;
@@ -13,12 +17,377 @@
     justify-content: center;
     font-family: 'Trebuchet MS', 'Helvetica CY', sans-serif;
     background: #f5f5f5;
+    padding: 24px;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .card {
+    width: 100%;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    padding: 28px 24px;
+  }
+
+  .card h1 {
+    font-size: 20px;
+    margin: 0 0 4px;
+    color: #222;
+  }
+
+  .card .subtitle {
+    font-size: 14px;
+    color: #777;
+    margin: 0 0 20px;
+  }
+
+  .days {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 16px;
+  }
+
+  .day-btn {
+    flex: 0 0 auto;
+    border: 1px solid #e0e0e0;
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 10px 14px;
+    text-align: center;
+    cursor: pointer;
+    font-family: inherit;
+    color: #333;
+    min-width: 64px;
+  }
+
+  .day-btn .dow {
+    display: block;
+    font-size: 11px;
+    color: #999;
+    text-transform: uppercase;
+  }
+
+  .day-btn .num {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 2px;
+  }
+
+  .day-btn.active {
+    background: #d12222;
+    border-color: #d12222;
+    color: #fff;
+  }
+
+  .day-btn.active .dow {
+    color: #fce9e9;
+  }
+
+  .slots {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .slot-btn {
+    border: 1px solid #e0e0e0;
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 10px 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .slot-btn:hover {
+    border-color: #d12222;
+  }
+
+  .slot-btn.active {
+    background: #d12222;
+    border-color: #d12222;
+    color: #fff;
+  }
+
+  .slot-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .selected-info {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 16px;
+    min-height: 18px;
+  }
+
+  .selected-info b {
+    color: #222;
+  }
+
+  .primary-btn {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+    background: #d12222;
+    cursor: pointer;
+    transition: background 0.15s, opacity 0.15s;
+  }
+
+  .primary-btn:hover {
+    background: #b81c1c;
+  }
+
+  .primary-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+
+  .done-note {
+    font-size: 13px;
+    color: #2a9d5c;
+    text-align: center;
+    display: none;
+  }
+
+  .done-note.visible {
+    display: block;
+  }
+
+  .card .primary-btn.hidden-when-done,
+  .card.done .primary-btn {
+    display: none;
+  }
+
+  .card.done .done-note {
+    display: block;
+  }
+
+  .zadarma-block {
+    text-align: center;
+    display: none;
+  }
+
+  .zadarma-block.visible {
+    display: block;
+  }
+
+  .zadarma-block .zadarma-caption {
+    font-size: 13px;
+    color: #2a9d5c;
+    margin-bottom: 12px;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 1000;
+  }
+
+  .modal-overlay.open {
+    display: flex;
+  }
+
+  .modal {
+    background: #fff;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 380px;
+    padding: 24px;
+    position: relative;
+  }
+
+  .modal h2 {
+    font-size: 18px;
+    margin: 0 0 4px;
+    color: #222;
+  }
+
+  .modal .modal-sub {
+    font-size: 13px;
+    color: #777;
+    margin: 0 0 18px;
+    min-height: 16px;
+  }
+
+  .modal .close-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    border: none;
+    background: none;
+    font-size: 18px;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .field {
+    margin-bottom: 14px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 13px;
+    color: #444;
+    margin-bottom: 6px;
+  }
+
+  .field input {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 14px;
+  }
+
+  .field input:focus {
+    outline: none;
+    border-color: #d12222;
+  }
+
+  .field .error {
+    font-size: 12px;
+    color: #d12222;
+    margin-top: 4px;
+    display: none;
+  }
+
+  .field.invalid input {
+    border-color: #d12222;
+  }
+
+  .field.invalid .error {
+    display: block;
+  }
+
+  .submit-btn {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 13px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+    background: #d12222;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+
+  .submit-btn:hover {
+    background: #b81c1c;
   }
 </style>
 </head>
 <body>
 
-  <div id="myZadarmaCallmeWidget18481"></div>
+  <div class="page">
+
+    <!-- Форма 1: бронирование консультации по слотам -->
+    <div class="card" id="bookingCard">
+      <h1>Забронировать консультацию</h1>
+      <p class="subtitle">Выберите удобные день и время</p>
+
+      <div class="days" id="days"></div>
+      <div class="slots" id="slots"></div>
+
+      <p class="selected-info" id="selectedInfo"></p>
+
+      <button class="primary-btn" id="bookBtn" disabled>Забронировать</button>
+      <p class="done-note" id="bookingDoneNote">Спасибо! Заявка на консультацию принята, мы свяжемся с вами для подтверждения.</p>
+    </div>
+
+    <!-- Форма 2: просто оставить данные для связи, без выбора времени -->
+    <div class="card" id="leaveContactCard">
+      <h1>Остались вопросы?</h1>
+      <p class="subtitle">Оставьте свои данные — перезвоним в ближайшее время, без привязки к конкретному времени</p>
+
+      <button class="primary-btn" id="leaveContactBtn">Оставить данные для связи</button>
+      <p class="done-note" id="contactDoneNote">Спасибо! Мы получили ваши данные и скоро свяжемся с вами.</p>
+    </div>
+
+    <!-- Кнопка Zadarma появляется после любой из двух форм -->
+    <div class="card zadarma-block" id="zadarmaBlock">
+      <p class="zadarma-caption">А если срочно — можете позвонить нам прямо сейчас:</p>
+      <div id="myZadarmaCallmeWidget18481"></div>
+    </div>
+
+  </div>
+
+  <!-- Модалка для формы бронирования -->
+  <div class="modal-overlay" id="bookingModalOverlay">
+    <div class="modal">
+      <button class="close-btn" data-close="bookingModalOverlay" aria-label="Закрыть">✕</button>
+      <h2>Подтверждение записи</h2>
+      <p class="modal-sub" id="bookingModalSub"></p>
+
+      <form id="bookingForm" novalidate>
+        <div class="field" id="bookingNameField">
+          <label for="bookingNameInput">ФИО</label>
+          <input type="text" id="bookingNameInput" name="name" placeholder="Иванов Иван Иванович" autocomplete="name" value="Иванов Иван Иванович">
+          <div class="error">Пожалуйста, укажите ФИО</div>
+        </div>
+
+        <div class="field" id="bookingPhoneField">
+          <label for="bookingPhoneInput">Номер телефона</label>
+          <input type="tel" id="bookingPhoneInput" name="phone" placeholder="+7 900 000-00-00" autocomplete="tel" value="+7 900 123-45-67">
+          <div class="error">Пожалуйста, укажите корректный номер телефона</div>
+        </div>
+
+        <button type="submit" class="submit-btn">Записаться</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Модалка для формы "просто оставить данные" -->
+  <div class="modal-overlay" id="contactModalOverlay">
+    <div class="modal">
+      <button class="close-btn" data-close="contactModalOverlay" aria-label="Закрыть">✕</button>
+      <h2>Оставить данные для связи</h2>
+      <p class="modal-sub">Мы перезвоним в ближайшее рабочее время</p>
+
+      <form id="contactForm" novalidate>
+        <div class="field" id="contactNameField">
+          <label for="contactNameInput">ФИО</label>
+          <input type="text" id="contactNameInput" name="name" placeholder="Иванов Иван Иванович" autocomplete="name" value="Иванов Иван Иванович">
+          <div class="error">Пожалуйста, укажите ФИО</div>
+        </div>
+
+        <div class="field" id="contactPhoneField">
+          <label for="contactPhoneInput">Номер телефона</label>
+          <input type="tel" id="contactPhoneInput" name="phone" placeholder="+7 900 000-00-00" autocomplete="tel" value="+7 900 123-45-67">
+          <div class="error">Пожалуйста, укажите корректный номер телефона</div>
+        </div>
+
+        <button type="submit" class="submit-btn">Отправить</button>
+      </form>
+    </div>
+  </div>
 
   <div id="zadarmaScripts"></div>
   <script>
@@ -67,6 +436,197 @@
     } else if (window.attachEvent) {
       window.attachEvent('onload', myZadarmaCallmeWidgetFn18481);
     }
+  </script>
+
+  <script>
+    (function() {
+      var zadarmaBlock = document.getElementById('zadarmaBlock');
+
+      function revealZadarmaBlock() {
+        if (zadarmaBlock.classList.contains('visible')) return;
+        zadarmaBlock.classList.add('visible');
+        zadarmaBlock.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      function isValidPhone(value) {
+        var digits = value.replace(/\D/g, '');
+        return digits.length >= 10;
+      }
+
+      function closeModal(overlay) {
+        overlay.classList.remove('open');
+      }
+
+      document.querySelectorAll('.close-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          closeModal(document.getElementById(btn.getAttribute('data-close')));
+        });
+      });
+
+      document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+        overlay.addEventListener('click', function(e) {
+          if (e.target === overlay) closeModal(overlay);
+        });
+      });
+
+      // ---------- Форма 1: бронирование по слотам ----------
+      var DOW = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
+      var MONTHS = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+      var TIME_SLOTS = ['10:00', '11:00', '12:00', '13:30', '14:30', '15:30', '16:30', '17:30', '18:00'];
+      var DAYS_AHEAD = 7;
+
+      var days = [];
+      var today = new Date();
+      for (var i = 0; i < DAYS_AHEAD; i++) {
+        days.push(new Date(today.getFullYear(), today.getMonth(), today.getDate() + i));
+      }
+
+      var selectedDayIndex = 0;
+      var selectedSlot = null;
+
+      var daysEl = document.getElementById('days');
+      var slotsEl = document.getElementById('slots');
+      var selectedInfoEl = document.getElementById('selectedInfo');
+      var bookBtn = document.getElementById('bookBtn');
+      var bookingCard = document.getElementById('bookingCard');
+      var bookingDoneNote = document.getElementById('bookingDoneNote');
+
+      function renderDays() {
+        daysEl.innerHTML = '';
+        days.forEach(function(d, idx) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'day-btn' + (idx === selectedDayIndex ? ' active' : '');
+          btn.innerHTML = '<span class="dow">' + DOW[d.getDay()] + '</span><span class="num">' + d.getDate() + ' ' + MONTHS[d.getMonth()] + '</span>';
+          btn.addEventListener('click', function() {
+            selectedDayIndex = idx;
+            selectedSlot = null;
+            renderDays();
+            renderSlots();
+            updateSelectedInfo();
+          });
+          daysEl.appendChild(btn);
+        });
+      }
+
+      function pickSlotsForDay(idx) {
+        // Deterministic pseudo-availability so the demo looks realistic without a backend.
+        return TIME_SLOTS.filter(function(_, i) {
+          return (i + idx) % 3 !== 0;
+        });
+      }
+
+      function renderSlots() {
+        slotsEl.innerHTML = '';
+        var available = pickSlotsForDay(selectedDayIndex);
+        TIME_SLOTS.forEach(function(time) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'slot-btn' + (time === selectedSlot ? ' active' : '');
+          btn.textContent = time;
+          var isAvailable = available.indexOf(time) !== -1;
+          if (!isAvailable) {
+            btn.disabled = true;
+          } else {
+            btn.addEventListener('click', function() {
+              selectedSlot = time;
+              renderSlots();
+              updateSelectedInfo();
+            });
+          }
+          slotsEl.appendChild(btn);
+        });
+      }
+
+      function updateSelectedInfo() {
+        if (selectedSlot) {
+          var d = days[selectedDayIndex];
+          selectedInfoEl.innerHTML = 'Вы выбрали: <b>' + d.getDate() + ' ' + MONTHS[d.getMonth()] + ', ' + selectedSlot + '</b>';
+          bookBtn.disabled = false;
+        } else {
+          selectedInfoEl.innerHTML = '';
+          bookBtn.disabled = true;
+        }
+      }
+
+      renderDays();
+      renderSlots();
+      updateSelectedInfo();
+
+      var bookingModalOverlay = document.getElementById('bookingModalOverlay');
+      var bookingModalSub = document.getElementById('bookingModalSub');
+      var bookingForm = document.getElementById('bookingForm');
+      var bookingNameField = document.getElementById('bookingNameField');
+      var bookingPhoneField = document.getElementById('bookingPhoneField');
+      var bookingNameInput = document.getElementById('bookingNameInput');
+      var bookingPhoneInput = document.getElementById('bookingPhoneInput');
+
+      bookBtn.addEventListener('click', function() {
+        var d = days[selectedDayIndex];
+        bookingModalSub.textContent = 'Консультация: ' + d.getDate() + ' ' + MONTHS[d.getMonth()] + ', ' + selectedSlot;
+        bookingModalOverlay.classList.add('open');
+      });
+
+      bookingForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var nameValid = bookingNameInput.value.trim().length > 1;
+        var phoneValid = isValidPhone(bookingPhoneInput.value);
+
+        bookingNameField.classList.toggle('invalid', !nameValid);
+        bookingPhoneField.classList.toggle('invalid', !phoneValid);
+
+        if (!nameValid || !phoneValid) return;
+
+        // No backend wired up yet — booking data is only available client-side for now.
+        console.log('Booking submitted:', {
+          name: bookingNameInput.value.trim(),
+          phone: bookingPhoneInput.value.trim(),
+          day: days[selectedDayIndex],
+          slot: selectedSlot
+        });
+
+        closeModal(bookingModalOverlay);
+        bookingCard.classList.add('done');
+        revealZadarmaBlock();
+      });
+
+      // ---------- Форма 2: просто оставить данные ----------
+      var contactModalOverlay = document.getElementById('contactModalOverlay');
+      var contactForm = document.getElementById('contactForm');
+      var contactNameField = document.getElementById('contactNameField');
+      var contactPhoneField = document.getElementById('contactPhoneField');
+      var contactNameInput = document.getElementById('contactNameInput');
+      var contactPhoneInput = document.getElementById('contactPhoneInput');
+      var leaveContactBtn = document.getElementById('leaveContactBtn');
+      var leaveContactCard = document.getElementById('leaveContactCard');
+
+      leaveContactBtn.addEventListener('click', function() {
+        contactModalOverlay.classList.add('open');
+      });
+
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var nameValid = contactNameInput.value.trim().length > 1;
+        var phoneValid = isValidPhone(contactPhoneInput.value);
+
+        contactNameField.classList.toggle('invalid', !nameValid);
+        contactPhoneField.classList.toggle('invalid', !phoneValid);
+
+        if (!nameValid || !phoneValid) return;
+
+        // No backend wired up yet — contact data is only available client-side for now.
+        console.log('Contact submitted:', {
+          name: contactNameInput.value.trim(),
+          phone: contactPhoneInput.value.trim()
+        });
+
+        closeModal(contactModalOverlay);
+        leaveContactCard.classList.add('done');
+        revealZadarmaBlock();
+      });
+    })();
   </script>
 
 </body>
