@@ -431,8 +431,10 @@
       if (zadarmaCreatedFor[elementId]) return;
       zadarmaCreatedFor[elementId] = true;
       onZadarmaLibReady(function() {
-        var instance = new ZadarmaCallmeWidget(elementId);
-        instance.create({
+        // Must be a global bound to the exact elementId: the library's JSONP
+        // callback resolves as "<elementId>.zadarmaCreate", i.e. window[elementId].
+        window[elementId] = new ZadarmaCallmeWidget(elementId);
+        window[elementId].create({
           "widgetId": ZADARMA_WIDGET_ID,
           "sipId": ZADARMA_SIP_ID,
           "domElement": elementId
