@@ -190,6 +190,39 @@
     margin-bottom: 10px;
   }
 
+  .pay-row {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+    text-align: center;
+  }
+
+  .pay-btn {
+    width: 100%;
+    border: 2px solid #d12222;
+    border-radius: 10px;
+    padding: 12px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: bold;
+    color: #d12222;
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .pay-btn:hover {
+    background: #d12222;
+    color: #fff;
+  }
+
+  .pay-row .pay-note {
+    display: block;
+    font-size: 12px;
+    color: #999;
+    margin-top: 8px;
+  }
+
   /* Modal */
   .modal-overlay {
     position: fixed;
@@ -326,9 +359,9 @@
       <button class="primary-btn" id="leaveContactBtn">Оставить данные для связи</button>
       <p class="done-note" id="contactDoneNote">Спасибо! Мы получили ваши данные и скоро свяжемся с вами.</p>
 
-      <div class="or-call-row">
-        <span class="or-call-text">Или позвоните нам сразу:</span>
-        <div id="myZadarmaCallmeWidgetCard"></div>
+      <div class="pay-row">
+        <button class="pay-btn" id="payBtn" type="button">Оплатить рег. взнос $149</button>
+        <span class="pay-note">После оплаты с вами свяжется куратор</span>
       </div>
     </div>
 
@@ -564,10 +597,13 @@
       var contactPhoneInput = document.getElementById('contactPhoneInput');
       var leaveContactBtn = document.getElementById('leaveContactBtn');
       var leaveContactCard = document.getElementById('leaveContactCard');
+      var payBtn = document.getElementById('payBtn');
 
-      // Кнопка звонка сразу под "Оставить данные для связи" — всегда доступна,
-      // не требует заполнения формы.
-      ensureZadarmaButton('myZadarmaCallmeWidgetCard');
+      // Оплата рег. взноса — заглушка, реальный платёжный провайдер подключим позже.
+      payBtn.addEventListener('click', function() {
+        // TODO: подключить оплату, например перейти на Stripe Payment Link:
+        // window.location.href = 'https://buy.stripe.com/...';
+      });
 
       leaveContactBtn.addEventListener('click', function() {
         contactModalOverlay.classList.add('open');
